@@ -1,0 +1,156 @@
+<head>
+  <title> Documentation and Help </title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  background-color: BlanchedAlmond;
+  color: SaddleBrown;
+  cursor: pointer;
+  padding: 25px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 25px;
+}
+
+.active, .collapsible:hover {
+  background-color: #f0f0f0;
+}
+
+.content {
+  padding: 0 30px;
+  display: none;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+/* This is styling for navigation bar */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+  border: 2px solid #008CBA;
+}
+li {
+  float: left;
+}
+li a {
+  display: block;
+  color: black;
+  background-color:white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-family: Verdana, sans-serif;
+}
+li a:hover {
+  color: white;
+  background-color: #008CBA;
+}
+
+/* This is styling for buttons */
+.button {
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+margin: 4px 2px;
+cursor: pointer; }
+.button2 {
+background-color: white;
+color: black;
+border: 2px solid #008CBA;
+}
+.button2:hover {
+background-color: #008CBA;
+color: white;
+}
+body {
+  font-family: Verdana, sans-serif;
+}
+</style>
+<ul>
+  <li><a class="active" href="{{ url_for('homepage')  }}">Home</a></li>
+  <li><a href="{{ url_for('about')  }}">About</a></li>
+  <li><a href="{{ url_for('doc')  }}">Documentation and FAQs</a></li>
+</ul>
+<br>
+  <h1 style="text-align:center;"> Documentation and Help </h1>
+</head>
+<body>
+  <br>
+  <a href="static/AbAgDatabaseDownload.sqbpro"><button class="button button2" style="float:right" download="EntireAbAgDatabase"> Download Database </button></a>
+<br>
+<br>
+
+<button type="button" class="collapsible">Antibody</button>
+<div class="content">
+  <p> Antibodies are heavy proteins that are released by mature B-cells, that aid in identifying and capturing antigens that invade the bodies of most vertebrae. The antibodies are antigen specifc, due to their highly variable loops that are known as the antibodies' Complimentarity Determining Regions (CDRs). There are 4 chains in every antibody- two heavy and two light chains, and there are 3 CDRs on the distal ends of each of the chain- H1, H2, H3 and L1, L2 and L3.
+<br>
+<br>
+Other possible content to add into this section:
+<br>
+~ Data Source <br>
+~ The need for organising antibodies how we have organised in the database
+<br>
+~ The use of organised and annotated antibodies <br>
+~ Numbering for CDRS- Chothia or IMGT etc?<br>
+</p>
+</div>
+
+<button type="button" class="collapsible">Antigens</button>
+<div class="content">
+<p>
+  Antigens are described as a class of objects that are considered 'foreign' to the immune system of an organism. These objects range from viruses and bacteria, to worms. Sometimes molecules and secretions released from parts of the body are also considered as antigens.
+<br>
+<br>
+  As the term antigen is used to refer to something specific from an extremely diverse class, it is crucial that the the information be organised and classified in a manner that is both easily accessed and viewed.
+</p>
+</div>
+
+<button type="button" class="collapsible">Network Analysis</button>
+<div class="content">
+<p>
+  Networks are used for better visualisation of interactions between various antibodies and antigens. In this database, networks are used as a tool to find a query's corresponding antigen/antibody.
+<br>
+<br>
+More points that can be added:
+<br>
+~ How network properties are used to obtain the results
+<br>
+~The benefits of using network analysis to obtain results of a query in a database setting
+</p>
+</div>
+
+
+<button type="button" class="collapsible">Calculation of Biophysical Properties</button>
+<div class="content">
+  <p>
+    Adding info here
+    </p>
+    </div>
+
+
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
+</body>
