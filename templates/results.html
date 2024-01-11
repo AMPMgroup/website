@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search Results</title>
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-family: Verdana, sans-serif;
+        }
+
+        li a:hover {
+            color: white;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #FFE4C4;
+            /* Light Blue ADD8E6*/
+            color: rgba(0, 0, 0, 0.725);
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .cdr-table {
+            width: 50%;
+            margin-right: 15px;
+            /* Add margin to the right of the CDR table */
+            justify-content: space-between;
+            /* Add space between the divs */
+            align-items: flex-start;
+            /* Align items to the top */
+            flex: 1;
+        }
+
+        .cdr-container {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 20px;
+        }
+
+        .cdr-images {
+            flex: 1;
+            /* Image takes up 50% of the container */
+            margin-left: 20px;
+        }
+
+        .biophysical-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .biophysical-table {
+            flex: 1;
+            margin-right: 20px;
+            /* Adjust the spacing as needed */
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li><a class="active" href="{{ url_for('homepage') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('doc') }}">Documentation and Help</a></li>
+    </ul>
+    <div style="margin-bottom: 20px;"></div>
+    {% if not antigen_selected %}
+    <h1>CDR</h1>
+    <div class="table-container">
+        {% for pdb_id, data in cdr_data.items() %}
+        <div class="cdr-container">
+            <div class="cdr-table">
+                <h3>CDR for PDB ID: {{ pdb_id }}</h3>
+                <table>
+                    <tr>
+                        {% for col_name in data.column_names %}
+                        <th>{{ col_name }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for cdr_results in data.results %}
+                    <tr>
+                        {% for value in cdr_results %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="cdr-images">
+                <h3>CDR Info:</h3>
+                <img src="{{ cdr_images[pdb_id] }}" alt="CDR Image" width="350" height="250">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    </div>
+    <br>
+    <div style="margin-bottom: 80px;"></div>
+    <h1>Biophysical Properties</h1>
+    <div class="table-container">
+        {% for pdb_id, data in biophysical_data.items() %}
+        <h3>PDB ID: {{ pdb_id }}</h3>
+        <table>
+            <tr>
+                {% for col_name in biophysical_properties_column_names %}
+                <th>{{ col_name }}</th>
+                {% endfor %}
+            </tr>
+            {% set index = 0 %}
+            {% for result in data %}
+            <tr>
+                {% for value in result %}
+                <td>
+                    {% set col_name = biophysical_properties_column_names[index] %}
+                    {% if col_name in ['PHI', 'PSI', 'Omega', 'Chi'] %}
+                    {{ value|float|round(2) }}
+                    {% else %}
+                    {{ value }}
+                    {% endif %}
+                </td>
+                {% set index = index + 1 %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% endfor %}
+
+    </div>
+</body>
+<br>
+
+<body>
+    <!-- ... (existing body content if anyy) ... -->
+    <h1>Jmol</h1>
+    <div class="table-container">
+        <!-- dropdown for selecting PDB ID -->
+        <label for="pdb-dropdown">Select PDB ID:</label>
+        <select id="pdb-dropdown" class="pdb-dropdown">
+            {% for pdb_id in biophysical_data.keys() %}
+            <option value="{{ pdb_id }}">{{ pdb_id }}</option>
+            {% endfor %}
+        </select>
+</body>
+
+<body>
+    <!-- Jmol Viewer -->
+    <h3>Jmol Viewer for PDB ID</h3>
+    <script type="text/javascript" src="/static/Jmol-16.1.11-full/jmol-16.1.11/jsmol/JSmol.min.js"></script>
+    <script type="text/javascript">
+        // Move the Jmol initialization outside of the loop if not working
+        //var jmolApplet;
+        var jmolApplet0;
+        var s = document.location.search;
+        Jmol._debugCode = (s.indexOf("debugcode") >= 0);
+
+        function initializeJmol(pdbId) {
+            var Info = {
+                width: 800,
+                height: 450,
+                debug: false,
+                color: "0xFFFFFF",
+                addSelectionOptions: false,
+                use: "HTML5",   // JAVA HTML5 WEBGL are all options
+                j2sPath: "/static/Jmol-16.1.11-full/jmol-16.1.11/jsmol/j2s",
+                jarPath: "/static/Jmol-16.1.11-full/jmol-16.1.11/jsmol/j2s/java",
+                jarFile: "JmolAppletSigned.jar",
+                isSigned: true,
+                script: "set zoomlarge false; load /static/" + pdbId + ".pdb; cartoon only; color chain;",
+                serverURL: "https://chemapps.stolaf.edu/jmol/jsmol/php/jsmol.php",
+                readyFunction: function (applet) {
+                    jmolApplet = applet;
+                    jmol_isReady(applet);
+                },
+                disableJ2SLoadMonitor: true,
+                disableInitialConsole: true,
+                allowJavaScript: true
+            };
+            $("#appdiv").html(Jmol.getAppletHtml("jmolApplet0", Info));
+        }
+
+        function jmol_isReady(applet) {
+            document.title = (applet._id + " - Jmol " + Jmol.___JmolVersion);
+            Jmol._getElement(applet, "appletdiv").style.border = "3px solid black";
+        }
+
+        $(document).ready(function () {
+            // Initialize Jmol with the first PDB ID
+            initializeJmol($("#pdb-dropdown").val());
+
+            // Add an event listener to the dropdown to change Jmol on selection change
+            $("#pdb-dropdown").change(function () {
+                initializeJmol($(this).val());
+            });
+        });
+    </script>
+    </div>
+    <br>
+    <div id="appdiv"></div> <!-- This statement is necessary to display the JSmol window -->
+    <table>
+        <tr>
+            <th> Display </th>
+            <th> Console and Commands </th>
+            <th> Structure Viewing Options </th>
+            <th> Coloring Options </th>
+            <th> Labels </th>
+        </tr>
+        <tr>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'set window 1400 750')"> Larger JSmol window </a></td>
+            <td><a href="javascript:Jmol.showinitializeJmol(jmolApplet0, true)"> Show Console </a></td>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'select *;cartoons off;spacefill only')"> Spacefill </a>
+            </td>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'color amino')"> Color by Amino Acid </a></td>
+            <td><a
+                    href="javascript:Jmol.script(jmolApplet0,'if (_fileType == &quot;Pdb&quot;){select *.CA;label %n%r}else{select *;label %a};select *;')">
+                    Turn on labels </a></td>
+        </tr>
+        <tr>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'set window 620 300')"> Smaller JSmol Window </a></td>
+            <td><a href="javascript:Jmol.clearConsole(jmolApplet0)"> Clear Existing Commands </a></td>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'select *;cartoons off;spacefill 0.25;wireframe 0.15')">
+                    Ball and Stick </a></td>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'color chain')"> Color by chain </a></td>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'select *;labels off')"> Turn off labels </a></td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td><a href="javascript:Jmol.showinitializeJmol(jmolApplet0, false)"> Hide Console </a></td>
+            <td><a href="javascript:Jmol.script(jmolApplet0,'select protein or nucleic;ribbons only')"> Ribbon </a></td>
+            <td><a
+                    href="javascript:Jmol.script(jmolApplet0,'select all; wireframe only; wireframe 0.05; dots on; select hetero; wireframe off; select {{ jsmol }}; spacefill 0.4; color chain; labels on; ; label CHAIN:%c POS:%r [%n]; color label black; font label 0.9; ')">
+                    Highlight interacting Residues</a></td>
+            <!-- the og interface labelling command, comes after color yellow -->
+            <!-- if (_fileType == &quot;Pdb&quot;){select {{ jsmol }}.CA;label %n%r}else{select {{ jsmol }};label %a};select {{ jsmol }};  -->
+            <td> </td>
+        </tr>
+    </table>
+    <!-- to check if the interaction residues are obtained -->
+    <br>
+    </div>
+
+</body>
+
+</html>
