@@ -3,18 +3,22 @@ The database aims to serve to obtain relevant data about antibodies and antigens
 Entries can be accessed using their respective PDB IDs.
 
 # Requirements :
-Install flask application 
+Install MySQL installer latest version
+Install python 3.11.5
 ### Windows 
 ```bash
   pip install flask
   pip3 install pipenv
-  pipenv install
   pipenv shell
   pipenv install flask
+  pipenv shell
+  pip install mysql-connector-python 
 ```
 Set up the flask environment -- in terminal under .virtualenvs
 ```bash
 cd .virtualenvs\<your_env>
+or
+pipenv shell
 ```
 ```bash
 cd <your_directory>
@@ -32,7 +36,8 @@ flask run
 `about.html`
 `documentaion.html`
 
-# Connection string to database << edit the string accordingly in app.py >>
+# Connection string to database 
+### edit the string accordingly in app.py 
         host="localhost",
         user="root",
         password="divya",
