@@ -43,7 +43,7 @@ flask run
         password="divya",
         database="my_db"
 ### other files related to database: 
-`Final diagram.mwb`
+`Final diagram.mwb` , `static folder`
 
 #### Usage :
 Using visual studio code or any other compatible software
