@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Form</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-family: Verdana, sans-serif;
+        }
+
+        li a:hover {
+            color: white;
+        }
+
+        body {
+            color: black;  /* text change white */
+            font-family: Verdana, sans-serif;
+        }
+
+        .checkbox-container {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .checkbox-label {
+            font-family: Verdana, sans-serif;
+            margin-left: 5px;
+            cursor: pointer; /* Add a pointer cursor for better usability */
+        }
+
+        /* Style for the checkboxes when checked */
+        .checkbox-input:checked + .checkbox-label::before {
+            font-size: 16px;
+            margin-right: 5px;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .custom-black-button {
+            background-color: black;
+            color: white;
+            width: 80px;
+            height: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid white; /* Add a white border */
+        }
+        .custom-input {
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .custom-input:focus {
+            outline: none;
+            border-color: #008CBA;
+            box-shadow: 0 0 5px rgba(0, 140, 186, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a class="active" href="{{ url_for('homepage') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('doc') }}">Documentation and Help</a></li>
+    </ul>
+    <h1 style="text-align:center;" class="w3-wide">Antibody Antigen Database</h1>
+    <div style="margin-bottom: 50px;"></div>
+    <p>The database aims to serve to obtain relevant data about antibodies and antigens, and their interactions.</p>
+    <p>Entries can be accessed using their respective PDB IDs. Upon conducting a search, the following elements are displayed:</p>
+    <br>
+        <p> • Image of the PDB structure with the CDRs highlighted </p>
+        <p> • CDR Table : CDR loops and seqeunce, starting and ending positions </p>
+        <p> • Biophysical Properties Table : Displays the residues and their properties for the interacting residues present in the antibody/antigen complex. 
+                  Choose the option to view Antigen and or Antibody residues' properties during the search. </p>
+        <p> • Redirection to FoldX : For mutagenesis studies, we present the FoldX results for the query PDB ID. </p>
+        <p> • An interactive Jmol Window displaying the structure</p>
+    <br>
+    <div style="margin-bottom: 20px;"></div>
+    <form method="POST" action="/search" onsubmit="return validateForm()">
+        <label for="pdbid">Enter PDB IDs (comma-separated): </label>
+        <input type="text" id="pdbid" name="pdbid" required class="custom-input">
+        
+        <p>Display Interacting Antigen and/or Antibody Residues (choose one or both):</p>
+        
+        <label class="checkbox-container">
+            <input type="checkbox" class="checkbox-input" value="Antigen" name="Antigen">
+            <span class="checkbox-label">Antigen</span>
+        </label>
+        <label class="checkbox-container">
+            <input type="checkbox" class="checkbox-input" value="Antibody" name="Antibody">
+            <span class="checkbox-label">Antibody</span>
+        </label>
+        
+        <input class="custom-black-button" type="submit" value="Search">
+        
+    </form>
+    <script>
+        function validateForm() {
+            var antigenChecked = document.querySelector('input[name="Antigen"]').checked;
+            var antibodyChecked = document.querySelector('input[name="Antibody"]').checked;
+            
+            if (!antigenChecked && !antibodyChecked) {
+                alert("Please check at least one checkbox (Antigen or Antibody).");
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+</html>
