@@ -46,10 +46,9 @@ def cdr_search():
         r.Residue_Charge AS Charge, r.Residue_Polarity AS Residue_Polarity,
         r.Solvent_Accessible_SurfaceArea AS SASA, r.Charge AS Charge, r.PHI AS PHI, r.PSI AS PSI,
         r.Omega AS Omega, r.Chi AS Chi,
-        a.Is_Antigen_Chain AS Is_Antigen_Chain
-        FROM antigen AS a
-        INNER JOIN residue AS r ON a.PDBid = r.PDBid AND r.Is_Antigen_Chain = 'Antigen'
-        WHERE r.PDBid = %s AND a.Is_Antigen_Chain = 'Antigen';
+        r.Is_Antigen_Chain AS Is_Antigen_Chain
+        FROM residue AS r
+        WHERE r.PDBid = %s AND r.Is_Antigen_Chain = 'Antigen';
     """
     query_for_biophysical_antibody =  """
         -- First query for the "Biophysical_properties" table for Antibody
@@ -58,10 +57,9 @@ def cdr_search():
         r.Residue_Charge AS Charge, r.Residue_Polarity AS Residue_Polarity,
         r.Solvent_Accessible_SurfaceArea AS SASA, r.Charge AS Charge, r.PHI AS PHI, r.PSI AS PSI,
         r.Omega AS Omega, r.Chi AS Chi,
-        a.Is_Antigen_Chain AS Is_Antigen_Chain
-        FROM antigen AS a
-        INNER JOIN residue AS r ON a.PDBid = r.PDBid AND r.Is_Antigen_Chain = 'Antibody'
-        WHERE r.PDBid = %s AND a.Is_Antigen_Chain = 'Antibody';
+        r.Is_Antigen_Chain AS Is_Antigen_Chain
+        FROM residue AS r
+        WHERE r.PDBid = %s AND r.Is_Antigen_Chain = 'Antibody';
     """
 
     cdr_data = {}
