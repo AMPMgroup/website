@@ -5,6 +5,7 @@ Entries can be accessed using their respective PDB IDs.
 # Requirements :
 ```bash
 Install MySQL installer latest version
+Install MySQL workbench
 Install python 3.11.5
 ```
 ### Windows 
