@@ -3,8 +3,10 @@ The database aims to serve to obtain relevant data about antibodies and antigens
 Entries can be accessed using their respective PDB IDs.
 
 # Requirements :
+```bash
 Install MySQL installer latest version
 Install python 3.11.5
+```
 ### Windows 
 ```bash
   pip install flask
