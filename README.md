@@ -43,7 +43,7 @@ flask run
 ### edit the string accordingly in app.py 
         host="localhost",
         user="root",
-        password="divya",
+        password="",
         database="my_db"
 ### other files related to database: 
 Files found in syno: `Final diagram.mwb` , `my_db_cdr.sql`, `my_db_residue.sql`
